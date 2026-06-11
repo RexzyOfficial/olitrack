@@ -330,7 +330,7 @@
         </div>
         <div>
           <h1 class="font-display font-bold text-base text-white leading-tight tracking-tight">OliTrack</h1>
-          <p class="text-[10px] text-slate-500 font-mono-data leading-none">Honda BeAT Deluxe</p>
+          <p class="text-[10px] text-slate-500 font-mono-data leading-none" id="headerSubtitle">Honda BeAT Deluxe</p>
         </div>
       </div>
 
@@ -624,7 +624,7 @@
   <!-- ═══════════════════════════════════════════
        DELETE CONFIRM MODAL
   ═══════════════════════════════════════════ -->
-  <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-end justify-center p-4">
+  <div id="deleteModal" class="fixed inset-0 z-50 hidden items-end justify-center p-4">
     <div class="absolute inset-0 bg-black/60" id="deleteModalBackdrop"></div>
     <div class="relative w-full max-w-lg bg-slate-900 border border-slate-700 rounded-3xl p-6 animate-fade-in">
       <div class="flex items-center gap-3 mb-4">
@@ -813,7 +813,12 @@
     // DATE HELPERS
     // ─────────────────────────────────────────────
     function todayStr() {
-      return new Date().toISOString().split('T')[0];
+      // FIX Bug 3: gunakan local date agar tidak salah timezone (UTC vs WIB/WITA/WIT)
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
     }
 
     function parseDate(str) {
@@ -845,7 +850,11 @@
     }
 
     function dateToStr(date) {
-      return date.toISOString().split('T')[0];
+      // FIX Bug 3: gunakan local date agar tidak salah timezone
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
     }
 
     // ─────────────────────────────────────────────
@@ -971,6 +980,10 @@
     // RENDER DASHBOARD
     // ─────────────────────────────────────────────
     function renderDashboard() {
+      // FIX Bug 4: update subtitle header sesuai nama kendaraan di settings
+      const subtitle = document.getElementById('headerSubtitle');
+      if (subtitle) subtitle.textContent = state.settings.vehicleName || 'Honda BeAT Deluxe';
+
       renderStatusCards();
       renderSummaryStats();
     }
@@ -1257,8 +1270,19 @@
     function bindDeleteModal() {
       document.getElementById('deleteCancel').addEventListener('click', closeDeleteModal);
       document.getElementById('deleteModalBackdrop').addEventListener('click', closeDeleteModal);
+
+      // FIX Bug 1 & 2: logika hapus dipindahkan ke sini (deleteConfirm),
+      // bukan di closeDeleteModal agar Batal tidak ikut menghapus data.
       document.getElementById('deleteConfirm').addEventListener('click', () => {
-        if (state.deleteTargetId) {
+        if (state.deleteTargetId === '__all__') {
+          // Hapus semua riwayat
+          state.history = [];
+          save(KEYS.history, state.history);
+          renderDashboard();
+          renderHistory();
+          showToast('info', 'Semua riwayat dihapus');
+        } else if (state.deleteTargetId) {
+          // Hapus satu catatan berdasarkan id
           state.history = state.history.filter(h => h.id !== state.deleteTargetId);
           save(KEYS.history, state.history);
           renderDashboard();
@@ -1301,17 +1325,11 @@
     }
 
     function closeDeleteModal() {
+      // FIX Bug 1: closeDeleteModal HANYA menutup modal, tidak melakukan delete.
+      // Logika delete sudah dipindahkan ke deleteConfirm handler.
       const modal = document.getElementById('deleteModal');
       modal.classList.add('hidden');
       modal.classList.remove('flex');
-
-      if (state.deleteTargetId === '__all__') {
-        state.history = [];
-        save(KEYS.history, state.history);
-        renderDashboard();
-        renderHistory();
-        showToast('info', 'Semua riwayat dihapus');
-      }
       state.deleteTargetId = null;
     }
 
