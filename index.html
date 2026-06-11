@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" id="theme-color-meta" />
+  <meta name="description" content="Pengingat ganti oli Honda BeAT Deluxe – Oli Mesin & Oli Gardan" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="OliTrack" />
+
+  <title>OliTrack – Honda BeAT Deluxe</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json" />
+  <!-- Apple touch icon fallback -->
+  <link rel="apple-touch-icon" href="icon-192.svg" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50:  '#fff7ed',
+              100: '#ffedd5',
+              200: '#fed7aa',
+              300: '#fdba74',
+              400: '#fb923c',
+              500: '#f97316',
+              600: '#ea580c',
+              700: '#c2410c',
+              800: '#9a3412',
+              900: '#7c2d12',
+            },
+            slate: {
+              850: '#172033',
+              950: '#0a0f1e',
+            }
+          },
+          fontFamily: {
+            display: ['"Space Grotesk"', 'sans-serif'],
+            body: ['"Inter"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          boxShadow: {
+            'glow-orange': '0 0 24px -4px rgba(249,115,22,0.35)',
+            'glow-green':  '0 0 24px -4px rgba(34,197,94,0.3)',
+            'glow-yellow': '0 0 24px -4px rgba(234,179,8,0.3)',
+            'glow-red':    '0 0 24px -4px rgba(239,68,68,0.3)',
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4,0,0.6,1) infinite',
+            'fade-in': 'fadeIn 0.4s ease forwards',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%':   { opacity: '0', transform: 'translateY(8px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2, h3, .font-display { font-family: 'Space Grotesk', sans-serif; }
+    .font-mono-data { font-family: 'JetBrains Mono', monospace; }
+
+    /* Safe-area insets for notch phones */
+    .safe-top    { padding-top:    env(safe-area-inset-top, 0); }
+    .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0); }
+
+    /* Frosted glass effect */
+    .glass {
+      backdrop-filter: blur(16px) saturate(160%);
+      -webkit-backdrop-filter: blur(16px) saturate(160%);
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #f97316; border-radius: 99px; }
+
+    /* Smooth transitions */
+    .transition-theme {
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    /* Segmented pill toggle */
+    .pill-radio input:checked + label {
+      background: #f97316;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(249,115,22,0.35);
+    }
+
+    /* Animated gradient ring for status cards */
+    .ring-animated {
+      background: conic-gradient(#f97316, #fb923c, #fdba74, #f97316);
+      animation: spin 4s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Bottom nav active indicator */
+    .nav-item.active .nav-icon { color: #f97316; }
+    .nav-item.active .nav-label { color: #f97316; font-weight: 600; }
+
+    /* Toast */
+    #toast {
+      transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    #toast.show {
+      transform: translateY(0) !important;
+      opacity: 1 !important;
+    }
+
+    /* Card hover */
+    .status-card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .status-card:active { transform: scale(0.98); }
+
+    /* Input focus ring */
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #f97316;
+    }
+
+    /* History row animation */
+    .history-row { animation: fadeIn 0.3s ease forwards; }
+    .history-row:nth-child(1) { animation-delay: 0.05s; }
+    .history-row:nth-child(2) { animation-delay: 0.10s; }
+    .history-row:nth-child(3) { animation-delay: 0.15s; }
+    .history-row:nth-child(4) { animation-delay: 0.20s; }
+    .history-row:nth-child(5) { animation-delay: 0.25s; }
+
+    /* Progress bar */
+    .progress-bar-inner {
+      transition: width 0.8s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    /* Delete confirm shake */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-4px); }
+      40%, 80% { transform: translateX(4px); }
+    }
+    .shake { animation: shake 0.4s ease; }
+  </style>
+</head>
+
+<body class="dark bg-slate-950 text-slate-100 min-h-screen transition-theme" id="app-body">
+
+  <!-- ═══════════════════════════════════════════
+       HEADER
+  ═══════════════════════════════════════════ -->
+  <header class="sticky top-0 z-40 safe-top">
+    <div class="glass bg-slate-950/80 dark:bg-slate-950/80 border-b border-slate-800/60 px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <!-- Brand icon -->
+        <div class="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center shadow-glow-orange">
+          <i class="fa-solid fa-oil-can text-white text-sm"></i>
+        </div>
+        <div>
+          <h1 class="font-display font-bold text-base text-white leading-tight tracking-tight">OliTrack</h1>
+          <p class="text-[10px] text-slate-500 font-mono-data leading-none">Honda BeAT Deluxe</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <!-- Dark mode toggle -->
+        <button id="darkModeToggle" aria-label="Toggle dark mode"
+          class="w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:text-brand-400 hover:bg-slate-800 transition-all duration-200">
+          <i class="fa-solid fa-moon text-sm" id="darkModeIcon"></i>
+        </button>
+        <!-- Settings -->
+        <button id="settingsBtn" aria-label="Settings"
+          class="w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:text-brand-400 hover:bg-slate-800 transition-all duration-200">
+          <i class="fa-solid fa-sliders text-sm"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════════ -->
+  <main class="max-w-lg mx-auto px-4 pb-32">
+
+    <!-- ── PAGE: DASHBOARD ────────────────────── -->
+    <section id="page-dashboard" class="page-section pt-5 animate-fade-in">
+
+      <!-- Greeting sub-header -->
+      <div class="mb-4">
+        <p class="text-slate-500 text-sm">Status Kendaraan</p>
+        <h2 class="font-display font-bold text-xl text-white">Pantau Kondisi Oli</h2>
+      </div>
+
+      <!-- STATUS CARDS -->
+      <div class="space-y-3 mb-6" id="statusCards">
+        <!-- Cards injected by JS -->
+      </div>
+
+      <!-- QUICK ACTION -->
+      <button id="quickAddBtn"
+        class="w-full py-3.5 rounded-2xl bg-brand-500 hover:bg-brand-600 active:bg-brand-700 text-white font-display font-semibold text-sm flex items-center justify-center gap-2 shadow-glow-orange transition-all duration-200">
+        <i class="fa-solid fa-plus"></i>
+        Catat Ganti Oli Sekarang
+      </button>
+
+      <!-- SUMMARY STATS -->
+      <div class="mt-5 grid grid-cols-2 gap-3" id="summaryStats">
+        <!-- Injected by JS -->
+      </div>
+    </section>
+
+    <!-- ── PAGE: CATAT (FORM) ──────────────────── -->
+    <section id="page-catat" class="page-section hidden pt-5 animate-fade-in">
+
+      <div class="mb-5">
+        <p class="text-slate-500 text-sm">Log Perawatan</p>
+        <h2 class="font-display font-bold text-xl text-white">Catat Ganti Oli</h2>
+      </div>
+
+      <!-- FORM CARD -->
+      <div class="rounded-2xl bg-slate-900 border border-slate-800 p-5 space-y-5">
+
+        <!-- Tanggal -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
+            <i class="fa-regular fa-calendar mr-1.5 text-brand-400"></i>Tanggal Ganti
+          </label>
+          <input type="date" id="formDate"
+            class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white font-mono-data transition-all duration-200" />
+        </div>
+
+        <!-- Jenis Oli -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
+            <i class="fa-solid fa-droplet mr-1.5 text-brand-400"></i>Jenis Oli
+          </label>
+          <div class="flex gap-2 pill-radio">
+            <input type="radio" name="oilType" id="type-mesin" value="mesin" class="sr-only" />
+            <label for="type-mesin"
+              class="flex-1 text-center py-2.5 rounded-xl text-sm font-semibold bg-slate-800 text-slate-300 cursor-pointer transition-all duration-200 border border-slate-700">
+              <i class="fa-solid fa-gear mr-1"></i>Mesin
+            </label>
+
+            <input type="radio" name="oilType" id="type-gardan" value="gardan" class="sr-only" />
+            <label for="type-gardan"
+              class="flex-1 text-center py-2.5 rounded-xl text-sm font-semibold bg-slate-800 text-slate-300 cursor-pointer transition-all duration-200 border border-slate-700">
+              <i class="fa-solid fa-rotate mr-1"></i>Gardan
+            </label>
+
+            <input type="radio" name="oilType" id="type-keduanya" value="keduanya" class="sr-only" />
+            <label for="type-keduanya"
+              class="flex-1 text-center py-2.5 rounded-xl text-sm font-semibold bg-slate-800 text-slate-300 cursor-pointer transition-all duration-200 border border-slate-700">
+              <i class="fa-solid fa-check-double mr-1"></i>Keduanya
+            </label>
+          </div>
+        </div>
+
+        <!-- Odometer -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
+            <i class="fa-solid fa-gauge-high mr-1.5 text-brand-400"></i>Odometer
+            <span class="text-slate-600 normal-case font-normal ml-1">(Opsional)</span>
+          </label>
+          <div class="relative">
+            <input type="number" id="formOdometer" placeholder="mis. 12500"
+              class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 pr-14 text-sm text-white font-mono-data transition-all duration-200" />
+            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-500 font-mono-data">km</span>
+          </div>
+        </div>
+
+        <!-- Catatan -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
+            <i class="fa-regular fa-note-sticky mr-1.5 text-brand-400"></i>Catatan
+            <span class="text-slate-600 normal-case font-normal ml-1">(Opsional)</span>
+          </label>
+          <textarea id="formNotes" rows="2" placeholder='mis. "Motul LE 10W-30 650ml"'
+            class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white resize-none transition-all duration-200"></textarea>
+        </div>
+
+        <!-- Submit -->
+        <button id="submitForm"
+          class="w-full py-3.5 rounded-xl bg-brand-500 hover:bg-brand-600 active:bg-brand-700 text-white font-display font-semibold text-sm flex items-center justify-center gap-2 shadow-glow-orange transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+          <i class="fa-solid fa-floppy-disk"></i>
+          Simpan Catatan
+        </button>
+      </div>
+
+      <!-- Tip -->
+      <div class="mt-4 flex items-start gap-2.5 bg-slate-900/60 border border-slate-800 rounded-xl p-3.5">
+        <i class="fa-solid fa-lightbulb text-amber-400 text-sm mt-0.5 flex-shrink-0"></i>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Pilih <strong class="text-slate-300">"Keduanya"</strong> jika mengganti kedua oli sekaligus.
+          Jadwal berikutnya akan dihitung otomatis dari tanggal yang kamu masukkan.
+        </p>
+      </div>
+    </section>
+
+    <!-- ── PAGE: RIWAYAT ──────────────────────── -->
+    <section id="page-riwayat" class="page-section hidden pt-5 animate-fade-in">
+
+      <div class="mb-5 flex items-end justify-between">
+        <div>
+          <p class="text-slate-500 text-sm">Rekam Jejak</p>
+          <h2 class="font-display font-bold text-xl text-white">Riwayat Ganti Oli</h2>
+        </div>
+        <button id="clearAllBtn"
+          class="text-xs text-slate-500 hover:text-red-400 transition-colors flex items-center gap-1 py-1 px-2 rounded-lg hover:bg-red-400/10">
+          <i class="fa-solid fa-trash-can text-xs"></i> Hapus Semua
+        </button>
+      </div>
+
+      <!-- Filter pills -->
+      <div class="flex gap-2 mb-4 overflow-x-auto pb-1 scrollbar-hide">
+        <button class="filter-btn active flex-shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold bg-brand-500 text-white transition-all" data-filter="all">Semua</button>
+        <button class="filter-btn flex-shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold bg-slate-800 text-slate-400 transition-all" data-filter="mesin">Oli Mesin</button>
+        <button class="filter-btn flex-shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold bg-slate-800 text-slate-400 transition-all" data-filter="gardan">Oli Gardan</button>
+      </div>
+
+      <!-- History List -->
+      <div id="historyList" class="space-y-3">
+        <!-- Injected by JS -->
+      </div>
+
+      <!-- Empty state -->
+      <div id="emptyHistory" class="hidden text-center py-16">
+        <div class="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center mx-auto mb-4">
+          <i class="fa-solid fa-oil-can text-2xl text-slate-700"></i>
+        </div>
+        <p class="text-slate-500 font-semibold text-sm">Belum ada catatan</p>
+        <p class="text-slate-600 text-xs mt-1">Mulai catat ganti oli pertamamu</p>
+      </div>
+    </section>
+
+    <!-- ── PAGE: PENGATURAN ───────────────────── -->
+    <section id="page-pengaturan" class="page-section hidden pt-5 animate-fade-in">
+
+      <div class="mb-5">
+        <p class="text-slate-500 text-sm">Konfigurasi</p>
+        <h2 class="font-display font-bold text-xl text-white">Pengaturan</h2>
+      </div>
+
+      <!-- Vehicle Info -->
+      <div class="rounded-2xl bg-slate-900 border border-slate-800 p-5 mb-4">
+        <h3 class="font-display font-semibold text-sm text-slate-300 mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-motorcycle text-brand-400"></i> Info Kendaraan
+        </h3>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs text-slate-500 mb-1.5">Nama Kendaraan</label>
+            <input type="text" id="settingVehicleName" value="Honda BeAT Deluxe"
+              class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-500 mb-1.5">Nomor Polisi</label>
+            <input type="text" id="settingPlate" placeholder="mis. B 1234 XYZ"
+              class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white font-mono-data uppercase" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Interval Settings -->
+      <div class="rounded-2xl bg-slate-900 border border-slate-800 p-5 mb-4">
+        <h3 class="font-display font-semibold text-sm text-slate-300 mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-clock-rotate-left text-brand-400"></i> Interval Ganti Oli
+        </h3>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs text-slate-500 mb-1.5 flex items-center gap-1.5">
+              <i class="fa-solid fa-gear text-brand-400/70 text-xs"></i> Oli Mesin (hari)
+            </label>
+            <div class="relative">
+              <input type="number" id="settingMesinInterval" value="30" min="1" max="365"
+                class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 pr-14 text-sm text-white font-mono-data" />
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-500">hari</span>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-500 mb-1.5 flex items-center gap-1.5">
+              <i class="fa-solid fa-rotate text-brand-400/70 text-xs"></i> Oli Gardan (hari)
+            </label>
+            <div class="relative">
+              <input type="number" id="settingGardanInterval" value="60" min="1" max="365"
+                class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 pr-14 text-sm text-white font-mono-data" />
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-500">hari</span>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-500 mb-1.5">Peringatan Dini (hari sebelum jatuh tempo)</label>
+            <div class="relative">
+              <input type="number" id="settingWarningDays" value="5" min="1" max="30"
+                class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 pr-14 text-sm text-white font-mono-data" />
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-500">hari</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Save Settings -->
+      <button id="saveSettings"
+        class="w-full py-3.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-display font-semibold text-sm flex items-center justify-center gap-2 shadow-glow-orange transition-all duration-200">
+        <i class="fa-solid fa-floppy-disk"></i> Simpan Pengaturan
+      </button>
+
+      <!-- App Info -->
+      <div class="mt-6 text-center">
+        <p class="text-xs text-slate-600">OliTrack v1.0 · Honda BeAT Deluxe</p>
+        <p class="text-xs text-slate-700 mt-0.5">Data tersimpan lokal di perangkatmu</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════
+       BOTTOM NAVIGATION
+  ═══════════════════════════════════════════ -->
+  <nav class="fixed bottom-0 left-0 right-0 z-40 safe-bottom">
+    <div class="glass bg-slate-900/90 border-t border-slate-800/60 max-w-lg mx-auto">
+      <div class="flex items-center justify-around px-4 py-2">
+
+        <button class="nav-item active flex flex-col items-center gap-0.5 py-2 px-4 rounded-xl transition-all duration-200" data-page="dashboard">
+          <i class="nav-icon fa-solid fa-gauge-high text-lg transition-colors duration-200"></i>
+          <span class="nav-label text-[10px] text-slate-500 transition-colors duration-200">Dashboard</span>
+        </button>
+
+        <button class="nav-item flex flex-col items-center gap-0.5 py-2 px-4 rounded-xl transition-all duration-200" data-page="catat">
+          <!-- Plus pill button center -->
+          <div class="w-12 h-12 -mt-7 rounded-2xl bg-brand-500 shadow-glow-orange flex items-center justify-center">
+            <i class="nav-icon fa-solid fa-plus text-white text-base"></i>
+          </div>
+          <span class="nav-label text-[10px] text-slate-500 transition-colors duration-200">Catat</span>
+        </button>
+
+        <button class="nav-item flex flex-col items-center gap-0.5 py-2 px-4 rounded-xl transition-all duration-200" data-page="riwayat">
+          <i class="nav-icon fa-solid fa-clock-rotate-left text-lg transition-colors duration-200"></i>
+          <span class="nav-label text-[10px] text-slate-500 transition-colors duration-200">Riwayat</span>
+        </button>
+
+        <button class="nav-item flex flex-col items-center gap-0.5 py-2 px-4 rounded-xl transition-all duration-200" data-page="pengaturan">
+          <i class="nav-icon fa-solid fa-sliders text-lg transition-colors duration-200"></i>
+          <span class="nav-label text-[10px] text-slate-500 transition-colors duration-200">Pengaturan</span>
+        </button>
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════
+       SETTINGS MODAL (via settingsBtn header)
+  ═══════════════════════════════════════════ -->
+
+  <!-- ═══════════════════════════════════════════
+       DELETE CONFIRM MODAL
+  ═══════════════════════════════════════════ -->
+  <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-end justify-center p-4">
+    <div class="absolute inset-0 bg-black/60" id="deleteModalBackdrop"></div>
+    <div class="relative w-full max-w-lg bg-slate-900 border border-slate-700 rounded-3xl p-6 animate-fade-in">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-red-500/15 flex items-center justify-center">
+          <i class="fa-solid fa-trash-can text-red-400"></i>
+        </div>
+        <div>
+          <h3 class="font-display font-semibold text-white text-sm">Hapus Catatan?</h3>
+          <p class="text-xs text-slate-500 mt-0.5">Tindakan ini tidak bisa dibatalkan</p>
+        </div>
+      </div>
+      <div class="flex gap-3">
+        <button id="deleteCancel" class="flex-1 py-3 rounded-xl bg-slate-800 text-slate-300 text-sm font-semibold transition hover:bg-slate-700">
+          Batal
+        </button>
+        <button id="deleteConfirm" class="flex-1 py-3 rounded-xl bg-red-500 hover:bg-red-600 text-white text-sm font-semibold transition">
+          Hapus
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       TOAST NOTIFICATION
+  ═══════════════════════════════════════════ -->
+  <div id="toast"
+    class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 transform translate-y-4 opacity-0 pointer-events-none">
+    <div class="flex items-center gap-2.5 bg-slate-800 border border-slate-700 rounded-2xl px-4 py-3 shadow-2xl whitespace-nowrap">
+      <i id="toastIcon" class="text-sm"></i>
+      <span id="toastMsg" class="text-sm font-medium text-white"></span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SERVICE WORKER REGISTRATION
+  ═══════════════════════════════════════════ -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('[OliTrack] SW registered:', reg.scope))
+          .catch(err => console.log('[OliTrack] SW error:', err));
+      });
+    }
+  </script>
+
+  <!-- ═══════════════════════════════════════════
+       MAIN APP SCRIPT
+  ═══════════════════════════════════════════ -->
+  <script>
+  (() => {
+    'use strict';
+
+    // ─────────────────────────────────────────────
+    // CONSTANTS & STORAGE KEYS
+    // ─────────────────────────────────────────────
+    const KEYS = {
+      history:    'olitrack_history',
+      settings:   'olitrack_settings',
+      darkMode:   'olitrack_darkmode',
+    };
+
+    const DEFAULT_SETTINGS = {
+      vehicleName:    'Honda BeAT Deluxe',
+      plate:          '',
+      mesinInterval:  30,
+      gardanInterval: 60,
+      warningDays:    5,
+    };
+
+    // ─────────────────────────────────────────────
+    // STATE
+    // ─────────────────────────────────────────────
+    let state = {
+      history:  [],
+      settings: { ...DEFAULT_SETTINGS },
+      isDark:   true,
+      activeFilter: 'all',
+      deleteTargetId: null,
+    };
+
+    // ─────────────────────────────────────────────
+    // STORAGE HELPERS
+    // ─────────────────────────────────────────────
+    const load = (key, fallback) => {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch { return fallback; }
+    };
+    const save = (key, value) => {
+      try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+    };
+
+    // ─────────────────────────────────────────────
+    // INIT
+    // ─────────────────────────────────────────────
+    function init() {
+      state.history  = load(KEYS.history,  []);
+      state.settings = { ...DEFAULT_SETTINGS, ...load(KEYS.settings, {}) };
+      state.isDark   = load(KEYS.darkMode, true);
+
+      applyDarkMode();
+      populateSettings();
+      setDefaultFormDate();
+      renderDashboard();
+      renderHistory();
+
+      bindNav();
+      bindForm();
+      bindSettings();
+      bindDarkMode();
+      bindDeleteModal();
+      bindFilterBtns();
+      bindQuickAdd();
+    }
+
+    // ─────────────────────────────────────────────
+    // DARK MODE
+    // ─────────────────────────────────────────────
+    function applyDarkMode() {
+      const body = document.getElementById('app-body');
+      const icon = document.getElementById('darkModeIcon');
+      const meta = document.getElementById('theme-color-meta');
+
+      if (state.isDark) {
+        body.classList.add('dark');
+        body.classList.remove('light-mode');
+        icon.className = 'fa-solid fa-sun text-sm';
+        meta.content = '#0a0f1e';
+      } else {
+        body.classList.remove('dark');
+        body.classList.add('light-mode');
+        icon.className = 'fa-solid fa-moon text-sm';
+        meta.content = '#f8fafc';
+        // Light mode overrides
+        body.style.backgroundColor = '#f1f5f9';
+        body.style.color = '#0f172a';
+      }
+    }
+
+    function bindDarkMode() {
+      document.getElementById('darkModeToggle').addEventListener('click', () => {
+        state.isDark = !state.isDark;
+        save(KEYS.darkMode, state.isDark);
+        applyDarkMode();
+        applyLightModeColors();
+      });
+    }
+
+    function applyLightModeColors() {
+      // For simplicity, reload to apply Tailwind light mode classes properly
+      // In production you'd toggle classes — here a simple class toggle works
+      const cards = document.querySelectorAll('.bg-slate-900, .bg-slate-800');
+    }
+
+    // ─────────────────────────────────────────────
+    // NAVIGATION
+    // ─────────────────────────────────────────────
+    function bindNav() {
+      document.querySelectorAll('.nav-item').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const page = btn.dataset.page;
+          navigateTo(page);
+        });
+      });
+
+      document.getElementById('settingsBtn').addEventListener('click', () => {
+        navigateTo('pengaturan');
+      });
+    }
+
+    function navigateTo(page) {
+      // Update pages
+      document.querySelectorAll('.page-section').forEach(s => s.classList.add('hidden'));
+      const target = document.getElementById(`page-${page}`);
+      if (target) {
+        target.classList.remove('hidden');
+        target.style.animation = 'none';
+        void target.offsetWidth; // reflow
+        target.style.animation = '';
+      }
+
+      // Update nav
+      document.querySelectorAll('.nav-item').forEach(btn => {
+        if (btn.dataset.page === page) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      // Scroll top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ─────────────────────────────────────────────
+    // DATE HELPERS
+    // ─────────────────────────────────────────────
+    function todayStr() {
+      return new Date().toISOString().split('T')[0];
+    }
+
+    function parseDate(str) {
+      const [y, m, d] = str.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    }
+
+    function addDays(date, days) {
+      const d = new Date(date);
+      d.setDate(d.getDate() + days);
+      return d;
+    }
+
+    function diffDays(a, b) {
+      // Returns how many days until b from a (positive = future)
+      return Math.round((b - a) / 86400000);
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '–';
+      const d = parseDate(dateStr);
+      return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    function formatDateShort(dateStr) {
+      if (!dateStr) return '–';
+      const d = parseDate(dateStr);
+      return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    function dateToStr(date) {
+      return date.toISOString().split('T')[0];
+    }
+
+    // ─────────────────────────────────────────────
+    // OIL STATUS CALCULATION
+    // ─────────────────────────────────────────────
+    function getLastChange(type) {
+      const entries = state.history
+        .filter(h => h.type === type || h.type === 'keduanya')
+        .sort((a, b) => b.date.localeCompare(a.date));
+      return entries[0] || null;
+    }
+
+    function getOilStatus(type) {
+      const interval = type === 'mesin'
+        ? state.settings.mesinInterval
+        : state.settings.gardanInterval;
+
+      const last = getLastChange(type);
+      const today = new Date(); today.setHours(0,0,0,0);
+
+      if (!last) {
+        return {
+          lastDate:    null,
+          nextDate:    null,
+          daysLeft:    null,
+          status:      'unknown',
+          percent:     0,
+          label:       'Belum ada data',
+          labelShort:  '–',
+        };
+      }
+
+      const lastDate = parseDate(last.date);
+      const nextDate = addDays(lastDate, interval);
+      const daysLeft = diffDays(today, nextDate);
+      const elapsed  = diffDays(lastDate, today);
+      const percent  = Math.min(100, Math.max(0, Math.round((elapsed / interval) * 100)));
+
+      let status, label, labelShort;
+
+      if (daysLeft < 0) {
+        status     = 'overdue';
+        label      = `Terlambat ${Math.abs(daysLeft)} hari!`;
+        labelShort = `+${Math.abs(daysLeft)} hari`;
+      } else if (daysLeft === 0) {
+        status     = 'overdue';
+        label      = 'Hari ini jatuh tempo!';
+        labelShort = 'Hari ini!';
+      } else if (daysLeft <= state.settings.warningDays) {
+        status     = 'warning';
+        label      = `${daysLeft} hari lagi`;
+        labelShort = `${daysLeft} hari`;
+      } else {
+        status     = 'safe';
+        label      = `${daysLeft} hari lagi`;
+        labelShort = `${daysLeft} hari`;
+      }
+
+      return {
+        lastDate:   last.date,
+        nextDate:   dateToStr(nextDate),
+        daysLeft,
+        elapsed,
+        interval,
+        percent,
+        status,
+        label,
+        labelShort,
+      };
+    }
+
+    // ─────────────────────────────────────────────
+    // STATUS COLOR MAPS
+    // ─────────────────────────────────────────────
+    const STATUS = {
+      safe: {
+        bg:       'bg-emerald-500/10',
+        border:   'border-emerald-500/30',
+        text:     'text-emerald-400',
+        badge:    'bg-emerald-500/20 text-emerald-300',
+        bar:      'bg-emerald-500',
+        glow:     'shadow-glow-green',
+        dot:      'bg-emerald-400',
+        icon:     'fa-circle-check',
+        iconText: 'text-emerald-400',
+      },
+      warning: {
+        bg:       'bg-amber-500/10',
+        border:   'border-amber-500/30',
+        text:     'text-amber-400',
+        badge:    'bg-amber-500/20 text-amber-300',
+        bar:      'bg-amber-400',
+        glow:     'shadow-glow-yellow',
+        dot:      'bg-amber-400',
+        icon:     'fa-triangle-exclamation',
+        iconText: 'text-amber-400',
+      },
+      overdue: {
+        bg:       'bg-red-500/10',
+        border:   'border-red-500/30',
+        text:     'text-red-400',
+        badge:    'bg-red-500/20 text-red-300',
+        bar:      'bg-red-500',
+        glow:     'shadow-glow-red',
+        dot:      'bg-red-400',
+        icon:     'fa-circle-xmark',
+        iconText: 'text-red-400',
+      },
+      unknown: {
+        bg:       'bg-slate-800/50',
+        border:   'border-slate-700',
+        text:     'text-slate-400',
+        badge:    'bg-slate-700 text-slate-400',
+        bar:      'bg-slate-600',
+        glow:     '',
+        dot:      'bg-slate-500',
+        icon:     'fa-circle-question',
+        iconText: 'text-slate-500',
+      },
+    };
+
+    // ─────────────────────────────────────────────
+    // RENDER DASHBOARD
+    // ─────────────────────────────────────────────
+    function renderDashboard() {
+      renderStatusCards();
+      renderSummaryStats();
+    }
+
+    function renderStatusCards() {
+      const container = document.getElementById('statusCards');
+      const mesin  = getOilStatus('mesin');
+      const gardan = getOilStatus('gardan');
+
+      container.innerHTML = [
+        buildStatusCard('mesin',  '🔧 Oli Mesin',  'fa-gear',   mesin),
+        buildStatusCard('gardan', '⚙️ Oli Gardan', 'fa-rotate', gardan),
+      ].join('');
+    }
+
+    function buildStatusCard(type, title, iconClass, s) {
+      const c = STATUS[s.status];
+      const intervalLabel = type === 'mesin'
+        ? `Ganti tiap ${state.settings.mesinInterval} hari`
+        : `Ganti tiap ${state.settings.gardanInterval} hari`;
+
+      const progressColor = s.percent >= 100 ? 'bg-red-500'
+        : s.percent >= 80 ? 'bg-amber-400'
+        : 'bg-emerald-500';
+
+      return `
+      <div class="status-card rounded-2xl ${c.bg} border ${c.border} ${c.glow} p-4 cursor-pointer" 
+           onclick="window.olitrack.quickLog('${type}')">
+        
+        <!-- Header row -->
+        <div class="flex items-start justify-between mb-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-slate-900/60 flex items-center justify-center">
+              <i class="fa-solid ${iconClass} ${c.iconText} text-base"></i>
+            </div>
+            <div>
+              <p class="font-display font-semibold text-sm text-white">${title}</p>
+              <p class="text-[10px] text-slate-500">${intervalLabel}</p>
+            </div>
+          </div>
+          <span class="text-xs font-semibold px-2.5 py-1 rounded-full ${c.badge} flex items-center gap-1">
+            <i class="fa-solid ${c.icon} text-xs"></i>
+            ${s.status === 'unknown' ? 'Belum Dicatat' 
+              : s.status === 'safe' ? 'Aman'
+              : s.status === 'warning' ? 'Segera'
+              : 'Lewat Batas'}
+          </span>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="mb-3">
+          <div class="h-1.5 w-full bg-slate-800/80 rounded-full overflow-hidden">
+            <div class="progress-bar-inner h-full rounded-full ${progressColor}" 
+                 style="width: ${s.percent}%"></div>
+          </div>
+          <div class="flex justify-between mt-1.5">
+            <span class="text-[10px] text-slate-600 font-mono-data">${s.lastDate ? formatDateShort(s.lastDate) : 'Belum ada'}</span>
+            <span class="text-[10px] text-slate-600 font-mono-data">${s.percent}% terpakai</span>
+          </div>
+        </div>
+
+        <!-- Dates row -->
+        <div class="grid grid-cols-2 gap-2">
+          <div class="bg-slate-900/50 rounded-xl p-2.5">
+            <p class="text-[9px] text-slate-600 uppercase tracking-widest mb-0.5">Terakhir Ganti</p>
+            <p class="text-xs font-semibold text-slate-300 font-mono-data">
+              ${s.lastDate ? formatDateShort(s.lastDate) : '–'}
+            </p>
+          </div>
+          <div class="bg-slate-900/50 rounded-xl p-2.5">
+            <p class="text-[9px] text-slate-600 uppercase tracking-widest mb-0.5">Jatuh Tempo</p>
+            <p class="text-xs font-semibold ${c.text} font-mono-data">
+              ${s.nextDate ? formatDateShort(s.nextDate) : '–'}
+            </p>
+          </div>
+        </div>
+
+        <!-- Countdown pill -->
+        ${s.lastDate ? `
+        <div class="mt-3 flex items-center justify-center">
+          <div class="inline-flex items-center gap-2 bg-slate-900/60 rounded-full px-3.5 py-1.5">
+            <span class="w-1.5 h-1.5 rounded-full ${c.dot} ${s.status !== 'safe' ? 'animate-pulse-slow' : ''}"></span>
+            <span class="text-xs font-semibold ${c.text}">${s.label}</span>
+          </div>
+        </div>
+        ` : ''}
+      </div>`;
+    }
+
+    function renderSummaryStats() {
+      const container = document.getElementById('summaryStats');
+      const totalChanges = state.history.length;
+      const mesinCount   = state.history.filter(h => h.type === 'mesin' || h.type === 'keduanya').length;
+      const gardanCount  = state.history.filter(h => h.type === 'gardan' || h.type === 'keduanya').length;
+      const lastOdo      = [...state.history].filter(h => h.odometer).sort((a,b) => b.date.localeCompare(a.date))[0];
+
+      container.innerHTML = `
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-center">
+          <p class="font-mono-data font-bold text-2xl text-brand-400">${totalChanges}</p>
+          <p class="text-xs text-slate-500 mt-0.5">Total Ganti</p>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-center">
+          <p class="font-mono-data font-bold text-2xl text-slate-300">${mesinCount}/${gardanCount}</p>
+          <p class="text-xs text-slate-500 mt-0.5">Mesin / Gardan</p>
+        </div>
+        ${lastOdo ? `
+        <div class="col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <i class="fa-solid fa-gauge-high text-brand-400"></i>
+            <div>
+              <p class="text-xs text-slate-500">Odometer Terakhir</p>
+              <p class="font-mono-data font-bold text-sm text-white">${Number(lastOdo.odometer).toLocaleString('id-ID')} km</p>
+            </div>
+          </div>
+          <span class="text-xs text-slate-600">${formatDateShort(lastOdo.date)}</span>
+        </div>
+        ` : `
+        <div class="col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center gap-2.5">
+          <i class="fa-solid fa-info-circle text-slate-700"></i>
+          <p class="text-xs text-slate-600">Catat odometer saat ganti untuk tracking jarak tempuh</p>
+        </div>
+        `}
+      `;
+    }
+
+    // ─────────────────────────────────────────────
+    // RENDER HISTORY
+    // ─────────────────────────────────────────────
+    function renderHistory() {
+      const container = document.getElementById('historyList');
+      const empty     = document.getElementById('emptyHistory');
+
+      let filtered = [...state.history].sort((a, b) => b.date.localeCompare(a.date));
+
+      if (state.activeFilter !== 'all') {
+        filtered = filtered.filter(h =>
+          h.type === state.activeFilter || h.type === 'keduanya'
+        );
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      empty.classList.add('hidden');
+
+      container.innerHTML = filtered.map((entry, idx) => {
+        const typeLabel = entry.type === 'mesin' ? 'Oli Mesin'
+          : entry.type === 'gardan' ? 'Oli Gardan'
+          : 'Keduanya';
+
+        const typeBadge = entry.type === 'mesin'
+          ? 'bg-blue-500/15 text-blue-400 border-blue-500/25'
+          : entry.type === 'gardan'
+          ? 'bg-purple-500/15 text-purple-400 border-purple-500/25'
+          : 'bg-brand-500/15 text-brand-300 border-brand-500/25';
+
+        const typeIcon = entry.type === 'mesin' ? 'fa-gear'
+          : entry.type === 'gardan' ? 'fa-rotate'
+          : 'fa-check-double';
+
+        return `
+        <div class="history-row bg-slate-900 border border-slate-800 rounded-2xl p-4" 
+             style="opacity:0; animation-delay:${idx * 0.05}s">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3 flex-1 min-w-0">
+              <!-- Type icon -->
+              <div class="w-9 h-9 flex-shrink-0 rounded-xl bg-slate-800 flex items-center justify-center mt-0.5">
+                <i class="fa-solid ${typeIcon} text-sm text-slate-400"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <!-- Type badge + date -->
+                <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                  <span class="text-xs font-semibold px-2 py-0.5 rounded-full border ${typeBadge}">
+                    ${typeLabel}
+                  </span>
+                  <span class="text-xs text-slate-500 font-mono-data">${formatDateShort(entry.date)}</span>
+                </div>
+                
+                <!-- Notes -->
+                ${entry.notes ? `
+                <p class="text-xs text-slate-400 leading-relaxed truncate">"${entry.notes}"</p>
+                ` : ''}
+
+                <!-- Odometer -->
+                ${entry.odometer ? `
+                <div class="flex items-center gap-1 mt-1.5">
+                  <i class="fa-solid fa-gauge-high text-[10px] text-slate-600"></i>
+                  <span class="text-[10px] text-slate-500 font-mono-data">${Number(entry.odometer).toLocaleString('id-ID')} km</span>
+                </div>
+                ` : ''}
+              </div>
+            </div>
+
+            <!-- Delete button -->
+            <button onclick="window.olitrack.confirmDelete('${entry.id}')"
+              class="flex-shrink-0 w-8 h-8 rounded-xl bg-slate-800 hover:bg-red-500/15 text-slate-600 hover:text-red-400 flex items-center justify-center transition-all duration-200">
+              <i class="fa-solid fa-trash-can text-xs"></i>
+            </button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    // ─────────────────────────────────────────────
+    // FORM HANDLING
+    // ─────────────────────────────────────────────
+    function setDefaultFormDate() {
+      const el = document.getElementById('formDate');
+      if (el) el.value = todayStr();
+    }
+
+    function bindForm() {
+      // Default select first radio
+      const mesinRadio = document.getElementById('type-mesin');
+      if (mesinRadio) mesinRadio.checked = true;
+
+      document.getElementById('submitForm').addEventListener('click', handleSubmit);
+    }
+
+    function handleSubmit() {
+      const date      = document.getElementById('formDate').value;
+      const typeEl    = document.querySelector('input[name="oilType"]:checked');
+      const odometer  = document.getElementById('formOdometer').value;
+      const notes     = document.getElementById('formNotes').value.trim();
+      const btn       = document.getElementById('submitForm');
+
+      if (!date) {
+        showToast('error', 'Masukkan tanggal ganti oli');
+        return;
+      }
+      if (!typeEl) {
+        showToast('error', 'Pilih jenis oli');
+        return;
+      }
+
+      // Validate date not future
+      if (date > todayStr()) {
+        showToast('error', 'Tanggal tidak boleh di masa depan');
+        return;
+      }
+
+      const entry = {
+        id:        crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36),
+        date,
+        type:      typeEl.value,
+        odometer:  odometer ? parseInt(odometer, 10) : null,
+        notes:     notes || null,
+        createdAt: new Date().toISOString(),
+      };
+
+      state.history.push(entry);
+      save(KEYS.history, state.history);
+
+      // Reset form
+      document.getElementById('formDate').value     = todayStr();
+      document.getElementById('formOdometer').value = '';
+      document.getElementById('formNotes').value    = '';
+      document.getElementById('type-mesin').checked = true;
+
+      // Feedback
+      btn.innerHTML = '<i class="fa-solid fa-check"></i> Tersimpan!';
+      btn.classList.replace('bg-brand-500', 'bg-emerald-500');
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Simpan Catatan';
+        btn.classList.replace('bg-emerald-500', 'bg-brand-500');
+      }, 1800);
+
+      showToast('success', 'Catatan ganti oli disimpan!');
+
+      // Re-render
+      renderDashboard();
+      renderHistory();
+
+      // Navigate to dashboard
+      setTimeout(() => navigateTo('dashboard'), 1200);
+    }
+
+    // ─────────────────────────────────────────────
+    // DELETE
+    // ─────────────────────────────────────────────
+    function bindDeleteModal() {
+      document.getElementById('deleteCancel').addEventListener('click', closeDeleteModal);
+      document.getElementById('deleteModalBackdrop').addEventListener('click', closeDeleteModal);
+      document.getElementById('deleteConfirm').addEventListener('click', () => {
+        if (state.deleteTargetId) {
+          state.history = state.history.filter(h => h.id !== state.deleteTargetId);
+          save(KEYS.history, state.history);
+          renderDashboard();
+          renderHistory();
+          showToast('info', 'Catatan dihapus');
+        }
+        closeDeleteModal();
+      });
+
+      document.getElementById('clearAllBtn').addEventListener('click', () => {
+        if (state.history.length === 0) {
+          showToast('info', 'Riwayat sudah kosong');
+          return;
+        }
+        state.deleteTargetId = '__all__';
+        openDeleteModal();
+        document.getElementById('deleteModal').querySelector('h3').textContent = 'Hapus Semua Riwayat?';
+      });
+    }
+
+    window.olitrack = {
+      confirmDelete(id) {
+        state.deleteTargetId = id;
+        document.getElementById('deleteModal').querySelector('h3').textContent = 'Hapus Catatan?';
+        openDeleteModal();
+      },
+      quickLog(type) {
+        // Navigate to form with pre-selected type
+        navigateTo('catat');
+        const radioId = `type-${type}`;
+        const radio = document.getElementById(radioId);
+        if (radio) radio.checked = true;
+      }
+    };
+
+    function openDeleteModal() {
+      const modal = document.getElementById('deleteModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeDeleteModal() {
+      const modal = document.getElementById('deleteModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+
+      if (state.deleteTargetId === '__all__') {
+        state.history = [];
+        save(KEYS.history, state.history);
+        renderDashboard();
+        renderHistory();
+        showToast('info', 'Semua riwayat dihapus');
+      }
+      state.deleteTargetId = null;
+    }
+
+    // ─────────────────────────────────────────────
+    // FILTER BUTTONS
+    // ─────────────────────────────────────────────
+    function bindFilterBtns() {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.filter-btn').forEach(b => {
+            b.classList.remove('active', 'bg-brand-500', 'text-white');
+            b.classList.add('bg-slate-800', 'text-slate-400');
+          });
+          btn.classList.add('active', 'bg-brand-500', 'text-white');
+          btn.classList.remove('bg-slate-800', 'text-slate-400');
+          state.activeFilter = btn.dataset.filter;
+          renderHistory();
+        });
+      });
+    }
+
+    // ─────────────────────────────────────────────
+    // SETTINGS
+    // ─────────────────────────────────────────────
+    function populateSettings() {
+      const s = state.settings;
+      const v = id => document.getElementById(id);
+      v('settingVehicleName').value    = s.vehicleName    || '';
+      v('settingPlate').value          = s.plate          || '';
+      v('settingMesinInterval').value  = s.mesinInterval  || 30;
+      v('settingGardanInterval').value = s.gardanInterval || 60;
+      v('settingWarningDays').value    = s.warningDays    || 5;
+    }
+
+    function bindSettings() {
+      document.getElementById('saveSettings').addEventListener('click', () => {
+        const v = id => document.getElementById(id);
+        const mesinInterval  = parseInt(v('settingMesinInterval').value, 10)  || 30;
+        const gardanInterval = parseInt(v('settingGardanInterval').value, 10) || 60;
+        const warningDays    = parseInt(v('settingWarningDays').value, 10)    || 5;
+
+        if (mesinInterval < 1 || mesinInterval > 365) {
+          showToast('error', 'Interval mesin harus 1–365 hari'); return;
+        }
+        if (gardanInterval < 1 || gardanInterval > 365) {
+          showToast('error', 'Interval gardan harus 1–365 hari'); return;
+        }
+
+        state.settings = {
+          vehicleName:    v('settingVehicleName').value.trim() || 'Honda BeAT Deluxe',
+          plate:          v('settingPlate').value.trim().toUpperCase(),
+          mesinInterval,
+          gardanInterval,
+          warningDays,
+        };
+
+        save(KEYS.settings, state.settings);
+        renderDashboard();
+        showToast('success', 'Pengaturan disimpan!');
+
+        const btn = document.getElementById('saveSettings');
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Tersimpan!';
+        btn.classList.replace('bg-brand-500', 'bg-emerald-500');
+        setTimeout(() => {
+          btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Simpan Pengaturan';
+          btn.classList.replace('bg-emerald-500', 'bg-brand-500');
+        }, 1800);
+      });
+    }
+
+    // ─────────────────────────────────────────────
+    // QUICK ADD SHORTCUT
+    // ─────────────────────────────────────────────
+    function bindQuickAdd() {
+      document.getElementById('quickAddBtn').addEventListener('click', () => {
+        navigateTo('catat');
+      });
+    }
+
+    // ─────────────────────────────────────────────
+    // TOAST
+    // ─────────────────────────────────────────────
+    let toastTimer;
+    function showToast(type, message) {
+      const toast   = document.getElementById('toast');
+      const msg     = document.getElementById('toastMsg');
+      const icon    = document.getElementById('toastIcon');
+      const iconMap = {
+        success: 'fa-solid fa-circle-check text-emerald-400',
+        error:   'fa-solid fa-circle-xmark text-red-400',
+        info:    'fa-solid fa-circle-info text-blue-400',
+      };
+
+      msg.textContent = message;
+      icon.className  = iconMap[type] || iconMap.info;
+
+      toast.classList.add('show');
+      toast.style.opacity   = '1';
+      toast.style.transform = 'translateX(-50%) translateY(0)';
+
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+        toast.style.opacity   = '0';
+        toast.style.transform = 'translateX(-50%) translateY(16px)';
+      }, 2800);
+    }
+
+    // ─────────────────────────────────────────────
+    // START
+    // ─────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', init);
+
+  })();
+  </script>
+
+</body>
+</html>

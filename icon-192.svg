@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <!-- Background -->
+  <rect width="192" height="192" rx="40" fill="#0f172a"/>
+  <!-- Outer ring glow -->
+  <circle cx="96" cy="96" r="72" fill="none" stroke="#f97316" stroke-width="3" opacity="0.3"/>
+  <!-- Oil can body -->
+  <rect x="54" y="80" width="68" height="52" rx="8" fill="#f97316"/>
+  <!-- Oil can spout -->
+  <rect x="98" y="62" width="14" height="26" rx="6" fill="#fb923c"/>
+  <!-- Oil drop highlight -->
+  <ellipse cx="80" cy="106" rx="8" ry="12" fill="#fff" opacity="0.15"/>
+  <!-- Gear overlay top-right -->
+  <circle cx="148" cy="44" r="20" fill="#1e293b"/>
+  <circle cx="148" cy="44" r="12" fill="none" stroke="#f97316" stroke-width="3"/>
+  <circle cx="148" cy="44" r="4" fill="#f97316"/>
+  <!-- App label -->
+  <text x="96" y="162" text-anchor="middle" font-family="'Space Grotesk', Arial, sans-serif" font-weight="700" font-size="18" fill="#f97316" letter-spacing="2">OLI</text>
+</svg>
