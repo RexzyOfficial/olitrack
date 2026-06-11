@@ -160,6 +160,135 @@
       40%, 80% { transform: translateX(4px); }
     }
     .shake { animation: shake 0.4s ease; }
+
+    /* ══════════════════════════════════════════
+       LIGHT MODE OVERRIDES
+       Applied when body has .light-mode class
+    ══════════════════════════════════════════ */
+
+    /* Base */
+    .light-mode {
+      background-color: #f1f5f9 !important;
+      color: #0f172a !important;
+    }
+
+    /* Header */
+    .light-mode header > div {
+      background-color: rgba(255,255,255,0.85) !important;
+      border-color: #e2e8f0 !important;
+    }
+    .light-mode header h1 { color: #0f172a !important; }
+    .light-mode header p  { color: #94a3b8 !important; }
+    .light-mode #darkModeToggle,
+    .light-mode #settingsBtn  { color: #64748b !important; }
+    .light-mode #darkModeToggle:hover,
+    .light-mode #settingsBtn:hover { background-color: #f1f5f9 !important; color: #f97316 !important; }
+
+    /* Brand icon in header stays orange — no override needed */
+
+    /* Page headings */
+    .light-mode h2 { color: #0f172a !important; }
+    .light-mode .text-slate-500 { color: #64748b !important; }
+    .light-mode .text-slate-400 { color: #475569 !important; }
+    .light-mode .text-slate-300 { color: #334155 !important; }
+    .light-mode .text-white     { color: #0f172a !important; }
+    .light-mode .text-slate-600 { color: #94a3b8 !important; }
+
+    /* Cards */
+    .light-mode .bg-slate-900 { background-color: #ffffff !important; }
+    .light-mode .bg-slate-800 { background-color: #f8fafc !important; }
+    .light-mode .border-slate-800 { border-color: #e2e8f0 !important; }
+    .light-mode .border-slate-700 { border-color: #cbd5e1 !important; }
+
+    /* Status card inner boxes */
+    .light-mode .bg-slate-900\/50,
+    .light-mode .bg-slate-900\/60 { background-color: rgba(248,250,252,0.9) !important; }
+    .light-mode .bg-slate-800\/80 { background-color: #e2e8f0 !important; }
+
+    /* Inputs */
+    .light-mode input,
+    .light-mode textarea,
+    .light-mode select {
+      background-color: #f8fafc !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+    .light-mode input::placeholder,
+    .light-mode textarea::placeholder { color: #94a3b8 !important; }
+
+    /* Pill radio unselected */
+    .light-mode .pill-radio label {
+      background-color: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #475569 !important;
+    }
+
+    /* Bottom nav */
+    .light-mode nav > div {
+      background-color: rgba(255,255,255,0.92) !important;
+      border-color: #e2e8f0 !important;
+    }
+    .light-mode .nav-label { color: #94a3b8 !important; }
+    .light-mode .nav-item.active .nav-label { color: #f97316 !important; }
+    .light-mode .nav-item.active .nav-icon  { color: #f97316 !important; }
+    .light-mode .nav-icon { color: #94a3b8 !important; }
+
+    /* Delete modal */
+    .light-mode #deleteModal > div:last-child {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+    }
+    .light-mode #deleteModal h3 { color: #0f172a !important; }
+    .light-mode #deleteModal p  { color: #64748b !important; }
+    .light-mode #deleteCancel {
+      background-color: #f1f5f9 !important;
+      color: #334155 !important;
+    }
+
+    /* Filter buttons (riwayat) */
+    .light-mode .filter-btn:not(.active) {
+      background-color: #f1f5f9 !important;
+      color: #64748b !important;
+    }
+
+    /* History rows */
+    .light-mode .history-row {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+    }
+    .light-mode .history-row .bg-slate-800 {
+      background-color: #f1f5f9 !important;
+    }
+    .light-mode .history-row button {
+      background-color: #f1f5f9 !important;
+      color: #94a3b8 !important;
+    }
+    .light-mode .history-row button:hover {
+      background-color: rgba(239,68,68,0.08) !important;
+      color: #ef4444 !important;
+    }
+
+    /* Toast */
+    .light-mode #toast > div {
+      background-color: #1e293b !important;
+      border-color: #334155 !important;
+    }
+
+    /* Tip box */
+    .light-mode .bg-slate-900\/60 { background-color: rgba(255,255,255,0.7) !important; }
+
+    /* Summary stats cards */
+    .light-mode #summaryStats > div {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+    }
+
+    /* Scrollbar in light mode */
+    .light-mode ::-webkit-scrollbar-track { background: #f1f5f9; }
+
+    /* Clear all button */
+    .light-mode #clearAllBtn { color: #94a3b8 !important; }
+    .light-mode #clearAllBtn:hover { color: #ef4444 !important; }
   </style>
 </head>
 
@@ -607,9 +736,6 @@
         body.classList.add('light-mode');
         icon.className = 'fa-solid fa-moon text-sm';
         meta.content = '#f8fafc';
-        // Light mode overrides
-        body.style.backgroundColor = '#f1f5f9';
-        body.style.color = '#0f172a';
       }
     }
 
@@ -618,14 +744,7 @@
         state.isDark = !state.isDark;
         save(KEYS.darkMode, state.isDark);
         applyDarkMode();
-        applyLightModeColors();
       });
-    }
-
-    function applyLightModeColors() {
-      // For simplicity, reload to apply Tailwind light mode classes properly
-      // In production you'd toggle classes — here a simple class toggle works
-      const cards = document.querySelectorAll('.bg-slate-900, .bg-slate-800');
     }
 
     // ─────────────────────────────────────────────
